@@ -169,40 +169,44 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
 
     private fun showDialogPeopleHelp() {
         val random = Random
-        var progressA = 0
-        var progressB = 0
-        var progressC = 0
-        var progressD = 0
+        var progressA = 0.0
+        var progressB = 0.0
+        var progressC = 0.0
+        var progressD = 0.0
         when (listQuestion[level].trueCase) {
             1 -> {
-                progressA = 65 + random.nextInt(11)
-                progressB = 5 + random.nextInt(6)
-                progressC = 5 + random.nextInt(6)
+                progressA = 64.8 + random.nextDouble(11.2)
+                progressB = 5.0 + random.nextDouble(6.0)
+                progressC = 5.0 + random.nextDouble(6.0)
                 progressD = 100 - progressA - progressB - progressC
             }
             2 -> {
-                progressB = 65 + random.nextInt(11)
-                progressA = 5 + random.nextInt(6)
-                progressC = 5 + random.nextInt(6)
+                progressB = 64.8 + random.nextDouble(11.2)
+                progressA = 5.0 + random.nextDouble(6.0)
+                progressC = 5.0 + random.nextDouble(6.0)
                 progressD = 100 - progressA - progressB - progressC
             }
             3 -> {
-                progressC = 65 + random.nextInt(11)
-                progressB = 5 + random.nextInt(6)
-                progressA = 5 + random.nextInt(6)
+                progressC = 64.8 + random.nextDouble(11.2)
+                progressB = 5.0 + random.nextDouble(6.0)
+                progressA = 5.0 + random.nextDouble(6.0)
                 progressD = 100 - progressA - progressB - progressC
             }
             4 -> {
-                progressD = 65 + random.nextInt(11)
-                progressB = 5 + random.nextInt(6)
-                progressC = 5 + random.nextInt(6)
+                progressD = 64.8 + random.nextDouble(11.2)
+                progressB = 5.0 + random.nextDouble(6.0)
+                progressC = 5.0 + random.nextDouble(6.0)
                 progressA = 100 - progressD - progressB - progressC
             }
         }
+        progressA = Math.round(progressA * 100.0) / 100.0
+        progressB = Math.round(progressB * 100.0) / 100.0
+        progressC = Math.round(progressC * 100.0) / 100.0
+        progressD = Math.round(progressD * 100.0) / 100.0
         setDialogPeopleHelp(progressA, progressB, progressC, progressD)
     }
 
-    private fun setDialogPeopleHelp(progressA: Int, progressB: Int, progressC: Int, progressD: Int) {
+    private fun setDialogPeopleHelp(progressA: Double, progressB: Double, progressC: Double, progressD: Double) {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.dialog_people_help)
         dialog.setCancelable(false)

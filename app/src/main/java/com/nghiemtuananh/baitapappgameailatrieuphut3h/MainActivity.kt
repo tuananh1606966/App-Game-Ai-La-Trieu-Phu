@@ -1,13 +1,11 @@
 package com.nghiemtuananh.baitapappgameailatrieuphut3h
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.nghiemtuananh.baitapappgameailatrieuphut3h.baseactivity.BaseActivity
-import com.nghiemtuananh.baitapappgameailatrieuphut3h.baseactivity.LoadGameFragment
 import com.nghiemtuananh.baitapappgameailatrieuphut3h.databinding.ActivityMainBinding
 import com.nghiemtuananh.baitapappgameailatrieuphut3h.interfacee.IActivityAndHomeFragment
 import com.nghiemtuananh.baitapappgameailatrieuphut3h.interfacee.IActivityAndInGameFragment
@@ -87,7 +85,18 @@ class MainActivity : BaseActivity(), IActivityAndHomeFragment, IActivityAndInGam
         CommonApp.checkPeopleHelp = false
         altpDao = ALTPDao(this)
         listQuestion = altpDao.query15Question()
-        Toast.makeText(this, "Game over!!!", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Game over!!!", Toast.LENGTH_SHORT).show()
         fragmentManager.popBackStack("aaa", 0)
+    }
+
+    override fun onBackPressed() {
+        val fragment = getCurrentFragment()
+        if (fragment is HomeFragment) {
+            finish()
+        } else if (fragment is LoadGameFragment){
+            Toast.makeText(this, "Can't Back Press!", Toast.LENGTH_SHORT).show()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

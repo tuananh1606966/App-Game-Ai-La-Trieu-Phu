@@ -1,4 +1,4 @@
-package com.nghiemtuananh.baitapappgameailatrieuphut3h.baseactivity
+package com.nghiemtuananh.baitapappgameailatrieuphut3h
 
 import android.os.Bundle
 import android.view.LayoutInflater
