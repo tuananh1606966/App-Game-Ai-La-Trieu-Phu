@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sẵn Sàng?"
+        android:gravity="center_vertical"
+        android:textSize="26sp"
+        android:drawableLeft="@drawable/question_icon"
+        android:drawablePadding="12dp"
+        android:padding="5dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="#03A9F4"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Bạn đã sẵn sàng chưa?"
+        android:textColor="#ff00"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="18dp"
+        android:textSize="28sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+        <Button
+            android:id="@+id/btn_san_sang"
+            android:layout_width="0dp"
+            android:text="Sẵn sàng"
+            android:textSize="24dp"
+            android:textAllCaps="false"
+            android:layout_height="48dp"
+            android:background="#8BC34A"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btn_huy_bo"
+            android:layout_width="0dp"
+            android:text="Huỷ bỏ"
+            android:textSize="24dp"
+            android:textAllCaps="false"
+            android:layout_height="48dp"
+            android:background="#8BC34A"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</LinearLayout>

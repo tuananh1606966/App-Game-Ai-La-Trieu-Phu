@@ -9,7 +9,7 @@
     </data>
 <RelativeLayout
     android:layout_width="match_parent"
-    android:background="#390559"
+    android:background="@drawable/bg_purple_15_question"
     android:layout_height="match_parent">
     <ImageView
         android:layout_width="wrap_content"
@@ -17,11 +17,12 @@
         android:src="@drawable/atp_icon_retry"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"/>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="486dp"
-        android:src="@drawable/atp__bg_circle_anim"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/atp__bg_circle_anim" />
 
     <LinearLayout
         android:layout_width="match_parent"

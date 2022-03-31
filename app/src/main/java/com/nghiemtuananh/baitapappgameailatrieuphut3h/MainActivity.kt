@@ -9,11 +9,15 @@ import com.nghiemtuananh.baitapappgameailatrieuphut3h.baseactivity.BaseActivity
 import com.nghiemtuananh.baitapappgameailatrieuphut3h.databinding.ActivityMainBinding
 import com.nghiemtuananh.baitapappgameailatrieuphut3h.interfacee.IActivityAndHomeFragment
 import com.nghiemtuananh.baitapappgameailatrieuphut3h.interfacee.IActivityAndInGameFragment
+import com.nghiemtuananh.baitapappgameailatrieuphut3h.interfacee.IActivityAndIntroGame
+import com.nghiemtuananh.baitapappgameailatrieuphut3h.interfacee.IAdapterHighScore
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class MainActivity : BaseActivity(), IActivityAndHomeFragment, IActivityAndInGameFragment {
+class MainActivity : BaseActivity(), IActivityAndHomeFragment, IActivityAndInGameFragment,
+    IActivityAndIntroGame {
+    private var listHighScore: ArrayList<HighScore> = arrayListOf()
     private var listQuestion: ArrayList<Question> = arrayListOf()
     private val fragmentManager = supportFragmentManager
     private lateinit var altpDao: ALTPDao
@@ -31,28 +35,47 @@ class MainActivity : BaseActivity(), IActivityAndHomeFragment, IActivityAndInGam
     }
 
     private fun initData() {
+        listHighScore = altpDao.queryListHighScore()
         listQuestion = altpDao.query15Question()
     }
 
-    @SuppressLint("CheckResult")
     override fun onClickNowPlay() {
-        Observable.create<String?> {
-            it.onNext(null.toString())
-            SystemClock.sleep(7500)
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val intro15QuestionFragment = Intro15QuestionFragment()
+        fragmentTransaction.replace(R.id.fl_content, intro15QuestionFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
+    @SuppressLint("CheckResult")
+    override fun clickReady() {
+        Observable.create<Int> {
+            it.onNext(1)
+            SystemClock.sleep(7000)
+            it.onNext(2)
+            SystemClock.sleep(3000)
             it.onComplete()
         }.subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    val loadGameFragment = LoadGameFragment()
-                    fragmentTransaction.replace(R.id.fl_content, loadGameFragment)
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
+                    when (it) {
+                        1 -> {
+                            val fragmentTransaction = fragmentManager.beginTransaction()
+                            val loadGameFragment = LoadGameFragment()
+                            fragmentTransaction.replace(R.id.fl_content, loadGameFragment)
+                            fragmentTransaction.addToBackStack(null)
+                            fragmentTransaction.commit()
+                        }
+                        2 -> {
+                            CommonApp.level = 0
+                            CommonApp.checkEnd = false
+                            openLevelFragment()
+                        }
+                    }
                 },
                 {},
                 {
-                    CommonApp.level = 0
                     val fragmentTransaction = fragmentManager.beginTransaction()
                     val inGameFragment = InGameFragment()
                     val bundle = Bundle()
@@ -61,20 +84,60 @@ class MainActivity : BaseActivity(), IActivityAndHomeFragment, IActivityAndInGam
                     fragmentTransaction.replace(R.id.fl_content, inGameFragment)
                     fragmentTransaction.addToBackStack(null)
                     fragmentTransaction.commit()
-                    CommonApp.checkEnd = false
                 }
             )
     }
 
-    override fun nextLevel() {
+    private fun openLevelFragment() {
         val fragmentTransaction = fragmentManager.beginTransaction()
-        val inGameFragment = InGameFragment()
+        val levelFragment = LevelFragment()
         val bundle = Bundle()
-        bundle.putSerializable("listQuestion", listQuestion)
-        inGameFragment.arguments = bundle
-        fragmentTransaction.replace(R.id.fl_content, inGameFragment)
+        bundle.putInt("level", listQuestion[CommonApp.level].level)
+        levelFragment.arguments = bundle
+        fragmentTransaction.replace(R.id.fl_content, levelFragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
+    }
+
+    override fun saveHighScore(name: String, money: String, level: Int) {
+        altpDao.insertHighScore(name, money, level)
+    }
+
+    override fun clickCancel() {
+        fragmentManager.popBackStack("aaa", 0)
+    }
+
+    @SuppressLint("CheckResult")
+    override fun nextLevel() {
+        Observable.create<String?> {
+            it.onNext(null.toString())
+            SystemClock.sleep(3000)
+            it.onComplete()
+        }.subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    openLevelFragment()
+                },
+                {},
+                {
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    val inGameFragment = InGameFragment()
+                    val bundle = Bundle()
+                    bundle.putSerializable("listQuestion", listQuestion)
+                    inGameFragment.arguments = bundle
+                    fragmentTransaction.replace(R.id.fl_content, inGameFragment)
+                    fragmentTransaction.addToBackStack(null)
+                    fragmentTransaction.commit()
+                }
+            )
+    }
+
+    override fun getListHighScore(): ArrayList<HighScore> {
+        listHighScore = altpDao.queryListHighScore()
+        listHighScore.sortWith(compareBy({it.money.length}, {it.money}, {it.level}))
+        listHighScore.reverse()
+        return listHighScore
     }
 
     override fun onBackPress() {
@@ -93,7 +156,7 @@ class MainActivity : BaseActivity(), IActivityAndHomeFragment, IActivityAndInGam
         val fragment = getCurrentFragment()
         if (fragment is HomeFragment) {
             finish()
-        } else if (fragment is LoadGameFragment){
+        } else if (fragment is LoadGameFragment) {
             Toast.makeText(this, "Can't Back Press!", Toast.LENGTH_SHORT).show()
         } else {
             super.onBackPressed()

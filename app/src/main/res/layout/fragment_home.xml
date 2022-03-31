@@ -55,14 +55,15 @@
             android:layout_below="@id/ibtn_paly_non_press"
             android:src="@drawable/bg_hight_score_non_press"
             android:background="?selectableItemBackgroundBorderless"/>
+
         <ImageButton
             android:id="@+id/ibtn_hight_score_press"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/bg_hight_score_press"
             android:layout_below="@id/ibtn_paly_non_press"
-            android:visibility="invisible"
-            android:background="?selectableItemBackgroundBorderless"/>
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/bg_hight_score_press"
+            android:visibility="invisible" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

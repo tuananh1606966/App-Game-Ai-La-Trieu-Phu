@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="data"
+            type="com.nghiemtuananh.baitapappgameailatrieuphut3h.HighScore" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="12dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_nguoi_choi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/teal_700"
+            android:text="Người chơi:"/>
+
+        <TextView
+            android:id="@+id/tv_ten"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_nguoi_choi"
+            android:textSize="18sp"
+            android:layout_marginLeft="24dp"
+            android:text="@{data.ten, default = `Vô danh`}"/>
+        <TextView
+            android:id="@+id/tv_tien_thuong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tiền thưởng:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_below="@id/tv_nguoi_choi"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/teal_700"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{data.money, default = `000,000 VNĐ`}"
+            android:layout_alignBottom="@id/tv_tien_thuong"
+            android:layout_alignLeft="@id/tv_ten"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#E91E63"/>
+        <TextView
+            android:id="@+id/tv_cau_hoi_qua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Câu hỏi qua:"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/teal_700"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_below="@id/tv_tien_thuong"/>
+        <TextView
+            android:id="@+id/tv_cau_da_qua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/teal_700"
+            android:textSize="18sp"
+            android:text="@{`Câu ` + Integer.toString(data.level), default = `Câu 0`}"
+            android:layout_alignBottom="@id/tv_cau_hoi_qua"
+            android:layout_alignLeft="@id/tv_ten"/>
+
+    </RelativeLayout>
+</layout>

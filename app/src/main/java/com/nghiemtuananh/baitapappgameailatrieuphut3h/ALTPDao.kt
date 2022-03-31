@@ -1,5 +1,6 @@
 package com.nghiemtuananh.baitapappgameailatrieuphut3h
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.res.AssetManager
 import android.database.Cursor
@@ -12,13 +13,15 @@ import java.io.FileOutputStream
 class ALTPDao {
     private val mContext: Context
     private var mSqlite: SQLiteDatabase? = null
+
     constructor(mContext: Context) {
         this.mContext = mContext
         copyDatabase()
     }
 
     private fun copyDatabase() {
-        val path = Environment.getDataDirectory().path + File.separator + "data" + File.separator + mContext.packageName + File.separator + "Question"
+        val path =
+            Environment.getDataDirectory().path + File.separator + "data" + File.separator + mContext.packageName + File.separator + "Question"
         if (File(path).exists()) {
             return
         }
@@ -102,6 +105,78 @@ class ALTPDao {
         val trueCase = cur.getInt(indexTrueCase)
 
         return Question(question, level, caseA, caseB, caseC, caseD, trueCase)
+
+        closeDatabase()
+    }
+
+    fun insertHighScore(name: String, money: String, level: Int) {
+        openDatabase()
+
+        val keyValues = ContentValues()
+        keyValues.put("name", name)
+        keyValues.put("money", money)
+        keyValues.put("level", level)
+
+        // mở transaction
+        mSqlite!!.beginTransaction()
+        //insert/delete/edit
+        mSqlite!!.insert("highscore", null, keyValues)
+
+        mSqlite!!.setTransactionSuccessful()
+        mSqlite!!.endTransaction()
+
+        closeDatabase()
+    }
+
+    fun queryListHighScore(): ArrayList<HighScore> {
+        openDatabase()
+
+        var listHighScore: ArrayList<HighScore> = arrayListOf()
+        val query = "SELECT * from highscore"
+        val cur: Cursor = mSqlite!!.rawQuery(query, null)
+        cur.moveToFirst()
+
+        val indexName = cur.getColumnIndex("name")
+        val indexMoney = cur.getColumnIndex("money")
+        val indexLevel = cur.getColumnIndex("level")
+        while (!cur.isAfterLast) {
+            val name = cur.getString(indexName)
+            val money = cur.getString(indexMoney)
+            val level = cur.getInt(indexLevel)
+
+            cur.moveToNext()
+            listHighScore.add(HighScore(name, money, level))
+        }
+
+        return listHighScore
+
+        closeDatabase()
+    }
+
+    fun updateHighScore(id: Int, money: String, level: Int) {
+        openDatabase()
+
+        val keyValues = ContentValues()
+        keyValues.put("money", money)
+        keyValues.put("level", level)
+
+        mSqlite!!.beginTransaction()
+        mSqlite!!.update("high_score", keyValues, "id = $id", null)
+
+        mSqlite!!.setTransactionSuccessful()
+        mSqlite!!.endTransaction()
+
+        closeDatabase()
+    }
+
+    fun deleteHighScore(id: Int, money: String, level: Int) {
+        openDatabase()
+
+        mSqlite!!.beginTransaction()
+        mSqlite!!.delete("high_score", "id = $id", null)
+
+        mSqlite!!.setTransactionSuccessful()
+        mSqlite!!.endTransaction()
 
         closeDatabase()
     }
