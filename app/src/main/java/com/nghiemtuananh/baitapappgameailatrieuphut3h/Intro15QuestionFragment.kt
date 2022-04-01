@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class Intro15QuestionFragment : BaseFragment() {
+    var checkDialogShow = false
     lateinit var inter: IActivityAndIntroGame
     lateinit var animIntro: Animation
     var mediaPlayerClick: MediaPlayer? = null
@@ -65,7 +66,10 @@ class Intro15QuestionFragment : BaseFragment() {
             inter.clickCancel()
             dialog.dismiss()
         }
-        dialog.show()
+        if (!checkDialogShow) {
+            dialog.show()
+        }
+        checkDialogShow = true
     }
 
     @SuppressLint("CheckResult")

@@ -52,6 +52,8 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
     var listQuestion: ArrayList<Question> = arrayListOf()
     lateinit var inter: IActivityAndInGameFragment
     lateinit var binding: FragmentIngameBinding
+    var dialogCallHelp: Dialog? = null
+    var dialogPeopleHelp: Dialog? = null
     private lateinit var altpDao: ALTPDao
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -274,6 +276,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         }
         btnHuy.setOnClickListener {
             dialog.dismiss()
+            offDialogHelp()
             inter.onBackPress()
         }
         btnSave.setOnClickListener {
@@ -304,9 +307,19 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
                 }
             }
             dialog.dismiss()
+            offDialogHelp()
             inter.onBackPress()
         }
         dialog.show()
+    }
+
+    private fun offDialogHelp() {
+        if (dialogCallHelp != null && dialogCallHelp!!.isShowing) {
+            dialogCallHelp!!.dismiss()
+        }
+        if (dialogPeopleHelp != null && dialogPeopleHelp!!.isShowing) {
+            dialogPeopleHelp!!.dismiss()
+        }
     }
 
     private fun getMoneySave(level: Int): String {
@@ -427,22 +440,22 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         progressC: Double,
         progressD: Double,
     ) {
-        val dialog = Dialog(requireContext())
-        dialog.setContentView(R.layout.dialog_people_help)
-        dialog.setCancelable(false)
-        val window = dialog.window
+        dialogPeopleHelp = Dialog(requireContext())
+        dialogPeopleHelp!!.setContentView(R.layout.dialog_people_help)
+        dialogPeopleHelp!!.setCancelable(false)
+        val window = dialogPeopleHelp!!.window
         window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT)
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val txtProgressA = dialog.findViewById<TextView>(R.id.tv_progress_a)
-        val txtProgressB = dialog.findViewById<TextView>(R.id.tv_progress_b)
-        val txtProgressC = dialog.findViewById<TextView>(R.id.tv_progress_c)
-        val txtProgressD = dialog.findViewById<TextView>(R.id.tv_progress_d)
-        val progressViewA = dialog.findViewById<ProgressView>(R.id.progress_a)
-        val progressViewB = dialog.findViewById<ProgressView>(R.id.progress_b)
-        val progressViewC = dialog.findViewById<ProgressView>(R.id.progress_c)
-        val progressViewD = dialog.findViewById<ProgressView>(R.id.progress_d)
-        val btnThanks = dialog.findViewById<Button>(R.id.btn_thanks)
+        val txtProgressA = dialogPeopleHelp!!.findViewById<TextView>(R.id.tv_progress_a)
+        val txtProgressB = dialogPeopleHelp!!.findViewById<TextView>(R.id.tv_progress_b)
+        val txtProgressC = dialogPeopleHelp!!.findViewById<TextView>(R.id.tv_progress_c)
+        val txtProgressD = dialogPeopleHelp!!.findViewById<TextView>(R.id.tv_progress_d)
+        val progressViewA = dialogPeopleHelp!!.findViewById<ProgressView>(R.id.progress_a)
+        val progressViewB = dialogPeopleHelp!!.findViewById<ProgressView>(R.id.progress_b)
+        val progressViewC = dialogPeopleHelp!!.findViewById<ProgressView>(R.id.progress_c)
+        val progressViewD = dialogPeopleHelp!!.findViewById<ProgressView>(R.id.progress_d)
+        val btnThanks = dialogPeopleHelp!!.findViewById<Button>(R.id.btn_thanks)
 
         txtProgressA.setText("$progressA %")
         txtProgressB.setText("$progressB %")
@@ -455,9 +468,9 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         progressViewD.progress = progressD.toFloat()
 
         btnThanks.setOnClickListener {
-            dialog.dismiss()
+            dialogPeopleHelp!!.dismiss()
         }
-        dialog.show()
+        dialogPeopleHelp!!.show()
     }
 
     private fun switchQuestion() {
@@ -518,17 +531,17 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
             4 -> trueCase = "D"
         }
         var checkCalled = false
-        val dialog = Dialog(requireActivity())
-        dialog.setContentView(R.layout.dialog_call_help)
-        dialog.setCancelable(false)
-        val txtOk = dialog.findViewById<TextView>(R.id.tv_ok)
-        val txtAnwser = dialog.findViewById<TextView>(R.id.tv_anwser)
-        val ivMessi = dialog.findViewById<ImageView>(R.id.iv_messi)
-        val ivRonaldo = dialog.findViewById<ImageView>(R.id.iv_ronaldo)
-        val ivBigRonaldo = dialog.findViewById<ImageView>(R.id.iv_big_ronaldo)
-        val ivCongVinh = dialog.findViewById<ImageView>(R.id.iv_congvinh)
-        val ivNeymar = dialog.findViewById<ImageView>(R.id.iv_neymar)
-        val ivSuarez = dialog.findViewById<ImageView>(R.id.iv_suarez)
+        dialogCallHelp = Dialog(requireActivity())
+        dialogCallHelp!!.setContentView(R.layout.dialog_call_help)
+        dialogCallHelp!!.setCancelable(false)
+        val txtOk = dialogCallHelp!!.findViewById<TextView>(R.id.tv_ok)
+        val txtAnwser = dialogCallHelp!!.findViewById<TextView>(R.id.tv_anwser)
+        val ivMessi = dialogCallHelp!!.findViewById<ImageView>(R.id.iv_messi)
+        val ivRonaldo = dialogCallHelp!!.findViewById<ImageView>(R.id.iv_ronaldo)
+        val ivBigRonaldo = dialogCallHelp!!.findViewById<ImageView>(R.id.iv_big_ronaldo)
+        val ivCongVinh = dialogCallHelp!!.findViewById<ImageView>(R.id.iv_congvinh)
+        val ivNeymar = dialogCallHelp!!.findViewById<ImageView>(R.id.iv_neymar)
+        val ivSuarez = dialogCallHelp!!.findViewById<ImageView>(R.id.iv_suarez)
         ivMessi.setOnClickListener {
             if (!checkCalled) {
                 txtAnwser.setText("Đáp án của Messi là: $trueCase")
@@ -578,9 +591,9 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
             }
         }
         txtOk.setOnClickListener {
-            dialog.dismiss()
+            dialogCallHelp!!.dismiss()
         }
-        dialog.show()
+        dialogCallHelp!!.show()
     }
 
     @SuppressLint("CheckResult")
@@ -850,8 +863,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
                 {
                     mediaPlayerTimeOut!!.start()
                     CommonApp.checkEnd = true
-                    mediaPlayerBG!!.stop()
-                    muteAll()
+                    stopAllMp()
                     showDialogSaveScore(false)
                 }
             )
@@ -889,7 +901,23 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         super.onStop()
         mediaPlayerBG?.setVolume(0f, 0f)
         mediaPlayerTimeOut?.setVolume(0f, 0f)
-        muteAll()
+        mpCongrat?.setVolume(0f, 0f)
+        mpAnsA?.setVolume(0f, 0f)
+        mpAnsB?.setVolume(0f, 0f)
+        mpAnsC?.setVolume(0f, 0f)
+        mpAnsD?.setVolume(0f, 0f)
+        mpFalseA?.setVolume(0f, 0f)
+        mpFalseB?.setVolume(0f, 0f)
+        mpFalseC?.setVolume(0f, 0f)
+        mpFalseD?.setVolume(0f, 0f)
+        mpTrueA?.setVolume(0f, 0f)
+        mpTrueB?.setVolume(0f, 0f)
+        mpTrueC?.setVolume(0f, 0f)
+        mpTrueD?.setVolume(0f, 0f)
+        mpAnsNow?.setVolume(0f, 0f)
+        mediaPlayerCallHelp?.setVolume(0f, 0f)
+        mediaPlayerPeopleHelp?.setVolume(0f, 0f)
+        mediaPlayer5050?.setVolume(0f, 0f)
     }
 
     override fun onDestroy() {
@@ -940,23 +968,24 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         mediaPlayer5050 = null
     }
 
-    private fun muteAll() {
-        mpCongrat?.setVolume(0f, 0f)
-        mpAnsA?.setVolume(0f, 0f)
-        mpAnsB?.setVolume(0f, 0f)
-        mpAnsC?.setVolume(0f, 0f)
-        mpAnsD?.setVolume(0f, 0f)
-        mpFalseA?.setVolume(0f, 0f)
-        mpFalseB?.setVolume(0f, 0f)
-        mpFalseC?.setVolume(0f, 0f)
-        mpFalseD?.setVolume(0f, 0f)
-        mpTrueA?.setVolume(0f, 0f)
-        mpTrueB?.setVolume(0f, 0f)
-        mpTrueC?.setVolume(0f, 0f)
-        mpTrueD?.setVolume(0f, 0f)
-        mpAnsNow?.setVolume(0f, 0f)
-        mediaPlayerCallHelp?.setVolume(0f, 0f)
-        mediaPlayerPeopleHelp?.setVolume(0f, 0f)
-        mediaPlayer5050?.setVolume(0f, 0f)
+    private fun stopAllMp() {
+        mediaPlayerBG?.stop()
+        mpCongrat?.stop()
+        mpAnsA?.stop()
+        mpAnsB?.stop()
+        mpAnsC?.stop()
+        mpAnsD?.stop()
+        mpFalseA?.stop()
+        mpFalseB?.stop()
+        mpFalseC?.stop()
+        mpFalseD?.stop()
+        mpTrueA?.stop()
+        mpTrueB?.stop()
+        mpTrueC?.stop()
+        mpTrueD?.stop()
+        mpAnsNow?.stop()
+        mediaPlayerCallHelp?.stop()
+        mediaPlayerPeopleHelp?.stop()
+        mediaPlayer5050?.stop()
     }
 }
