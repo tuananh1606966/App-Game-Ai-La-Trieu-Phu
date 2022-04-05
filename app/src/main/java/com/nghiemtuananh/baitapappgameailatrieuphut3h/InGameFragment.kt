@@ -45,6 +45,8 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
     var mediaPlayerCallHelp: MediaPlayer? = null
     var mediaPlayerPeopleHelp: MediaPlayer? = null
     var mediaPlayer5050: MediaPlayer? = null
+    var mediaPlayerImportant: MediaPlayer? = null
+    var mediaPlayerWinner: MediaPlayer? = null
     lateinit var anim: Animation
     var isSelected = false
     var time: Int = 30
@@ -66,6 +68,10 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         binding.root.startAnimation(anim)
         listQuestion = requireArguments().getSerializable("listQuestion") as ArrayList<Question>
         inter = activity as IActivityAndInGameFragment
+        if (level == 14) {
+            mediaPlayerImportant = MediaPlayer.create(activity, R.raw.important)
+            mediaPlayerImportant!!.start()
+        }
         mediaPlayerTimeOut = MediaPlayer.create(activity, R.raw.out_of_time)
         mediaPlayerBG = getMpBG()
         mediaPlayerBG!!.isLooping = true
@@ -186,7 +192,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
             binding.ibtnEndGame -> {
                 mediaPlayerClick = MediaPlayer.create(activity, R.raw.touch_sound)
                 mediaPlayerClick!!.start()
-                mediaPlayerBG!!.stop()
+                stopAllMp()
                 showDialogSaveScore(true)
                 isSelected = true
             }
@@ -262,22 +268,22 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         val txtMoney = dialog.findViewById<TextView>(R.id.tv_money_over)
         when (stopGame) {
             true -> {
-                txtMoney.setText(getMoneySave(levelSave))
+                txtMoney.text = getMoneySave(levelSave)
             }
             false -> {
                 if (levelSave >= 10) {
-                    txtMoney.setText("22,000,000 VNĐ")
+                    txtMoney.text = "22,000,000 VNĐ"
                 } else if (levelSave < 10 && levelSave >= 5) {
-                    txtMoney.setText("2,000,000 VNĐ")
+                    txtMoney.text = "2,000,000 VNĐ"
                 } else {
-                    txtMoney.setText("000,000 VNĐ")
+                    txtMoney.text = "000,000 VNĐ"
                 }
             }
         }
         btnHuy.setOnClickListener {
             dialog.dismiss()
             offDialogHelp()
-            inter.onBackPress()
+            inter.onBackPress(false)
         }
         btnSave.setOnClickListener {
             when (stopGame) {
@@ -308,7 +314,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
             }
             dialog.dismiss()
             offDialogHelp()
-            inter.onBackPress()
+            inter.onBackPress(false)
         }
         dialog.show()
     }
@@ -457,10 +463,10 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         val progressViewD = dialogPeopleHelp!!.findViewById<ProgressView>(R.id.progress_d)
         val btnThanks = dialogPeopleHelp!!.findViewById<Button>(R.id.btn_thanks)
 
-        txtProgressA.setText("$progressA %")
-        txtProgressB.setText("$progressB %")
-        txtProgressC.setText("$progressC %")
-        txtProgressD.setText("$progressD %")
+        txtProgressA.text = "$progressA %"
+        txtProgressB.text = "$progressB %"
+        txtProgressC.text = "$progressC %"
+        txtProgressD.text = "$progressD %"
 
         progressViewA.progress = progressA.toFloat()
         progressViewB.progress = progressB.toFloat()
@@ -500,19 +506,19 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
                 {
                     when (it) {
                         1 -> {
-                            binding.tvCaseA.setText("")
+                            binding.tvCaseA.text = ""
                             binding.ibtnCaseANormal.isClickable = false
                         }
                         2 -> {
-                            binding.tvCaseB.setText("")
+                            binding.tvCaseB.text = ""
                             binding.ibtnCaseBNormal.isClickable = false
                         }
                         3 -> {
-                            binding.tvCaseC.setText("")
+                            binding.tvCaseC.text = ""
                             binding.ibtnCaseCNormal.isClickable = false
                         }
                         4 -> {
-                            binding.tvCaseD.setText("")
+                            binding.tvCaseD.text = ""
                             binding.ibtnCaseDNormal.isClickable = false
                         }
                     }
@@ -544,7 +550,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         val ivSuarez = dialogCallHelp!!.findViewById<ImageView>(R.id.iv_suarez)
         ivMessi.setOnClickListener {
             if (!checkCalled) {
-                txtAnwser.setText("Đáp án của Messi là: $trueCase")
+                txtAnwser.text = "Đáp án của Messi là: $trueCase"
                 checkCalled = true
             } else {
                 Toast.makeText(activity, "Bạn đã gọi điện rồi", Toast.LENGTH_LONG).show()
@@ -552,7 +558,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         }
         ivRonaldo.setOnClickListener {
             if (!checkCalled) {
-                txtAnwser.setText("Đáp án của Ronaldo là: $trueCase")
+                txtAnwser.text = "Đáp án của Ronaldo là: $trueCase"
                 checkCalled = true
             } else {
                 Toast.makeText(activity, "Bạn đã gọi điện rồi", Toast.LENGTH_LONG).show()
@@ -560,7 +566,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         }
         ivBigRonaldo.setOnClickListener {
             if (!checkCalled) {
-                txtAnwser.setText("Đáp án của Big Ronaldo là: $trueCase")
+                txtAnwser.text = "Đáp án của Big Ronaldo là: $trueCase"
                 checkCalled = true
             } else {
                 Toast.makeText(activity, "Bạn đã gọi điện rồi", Toast.LENGTH_LONG).show()
@@ -568,7 +574,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         }
         ivCongVinh.setOnClickListener {
             if (!checkCalled) {
-                txtAnwser.setText("Đáp án của Công Vinh là: $trueCase")
+                txtAnwser.text = "Đáp án của Công Vinh là: $trueCase"
                 checkCalled = true
             } else {
                 Toast.makeText(activity, "Bạn đã gọi điện rồi", Toast.LENGTH_LONG).show()
@@ -576,7 +582,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         }
         ivNeymar.setOnClickListener {
             if (!checkCalled) {
-                txtAnwser.setText("Đáp án của Neymar là: $trueCase")
+                txtAnwser.text = "Đáp án của Neymar là: $trueCase"
                 checkCalled = true
             } else {
                 Toast.makeText(activity, "Bạn đã gọi điện rồi", Toast.LENGTH_LONG).show()
@@ -584,7 +590,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         }
         ivSuarez.setOnClickListener {
             if (!checkCalled) {
-                txtAnwser.setText("Đáp án của Suarez là: $trueCase")
+                txtAnwser.text = "Đáp án của Suarez là: $trueCase"
                 checkCalled = true
             } else {
                 Toast.makeText(activity, "Bạn đã gọi điện rồi", Toast.LENGTH_LONG).show()
@@ -685,7 +691,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
                                 nextLevel()
                             }
                         }
-                    } else if (level == 9){
+                    } else if (level == 9) {
                         mp.setOnCompletionListener {
                             mpCongrat = getMpCongra()
                             mpCongrat!!.start()
@@ -702,13 +708,23 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
 
     @SuppressLint("CheckResult")
     private fun nextLevel() {
-        Observable.create<Void> {
-            SystemClock.sleep(3000)
-            it.onComplete()
+        Observable.create<String> {
+            if (level == 14) {
+                SystemClock.sleep(2000)
+                it.onNext(null.toString())
+            } else {
+                SystemClock.sleep(3000)
+                it.onComplete()
+            }
         }.subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {},
+                {
+                    mediaPlayerWinner = MediaPlayer.create(activity, R.raw.best_player)
+                    mediaPlayerWinner!!.start()
+                    mediaPlayerBG!!.stop()
+                    showDialogSaveScoreWinner()
+                },
                 {},
                 {
                     if (!CommonApp.checkEnd) {
@@ -717,6 +733,37 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
                     }
                 }
             )
+    }
+
+    private fun showDialogSaveScoreWinner() {
+        var name = ""
+        var money = ""
+        val levelSave = 15
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_save_score_winner)
+        dialog.setCancelable(false)
+        val edtTen = dialog.findViewById<EditText>(R.id.edt_name)
+        val btnSave = dialog.findViewById<Button>(R.id.btn_save)
+        val btnHuy = dialog.findViewById<Button>(R.id.btn_huy_save)
+        val txtMoney = dialog.findViewById<TextView>(R.id.tv_money_over)
+        btnHuy.setOnClickListener {
+            dialog.dismiss()
+            offDialogHelp()
+            inter.onBackPress(true)
+        }
+        btnSave.setOnClickListener {
+            name = if (edtTen.text.toString().trim() == "") {
+                "Vô danh"
+            } else {
+                edtTen.text.toString().trim()
+            }
+            money = txtMoney.text.toString()
+            inter.saveHighScore(name, money, levelSave)
+            dialog.dismiss()
+            offDialogHelp()
+            inter.onBackPress(true)
+        }
+        dialog.show()
     }
 
     private fun pauseTimeAndOffClickableAllButton() {
@@ -737,75 +784,51 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun getCurrentMpAnsA(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.ans_a)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.ans_a)
     }
 
     private fun getCurrentMpAnsB(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.ans_b)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.ans_b)
     }
 
     private fun getCurrentMpAnsC(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.ans_c2)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.ans_c2)
     }
 
     private fun getCurrentMpAnsD(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.ans_d)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.ans_d)
     }
 
     private fun getCurrentMpFalseA(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.lose_a)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.lose_a)
     }
 
     private fun getCurrentMpFalseB(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.lose_b)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.lose_b)
     }
 
     private fun getCurrentMpFalseC(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.lose_c)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.lose_c)
     }
 
     private fun getCurrentMpFalseD(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.lose_d)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.lose_d)
     }
 
     private fun getCurrentMpTrueA(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.true_a)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.true_a)
     }
 
     private fun getCurrentMpTrueB(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.true_b)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.true_b)
     }
 
     private fun getCurrentMpTrueC(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.true_c)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.true_c)
     }
 
     private fun getCurrentMpTrueD(): MediaPlayer {
-        var mediaPlayer: MediaPlayer
-        mediaPlayer = MediaPlayer.create(activity, R.raw.true_d2)
-        return mediaPlayer
+        return MediaPlayer.create(activity, R.raw.true_d2)
     }
 
     private fun getMpCongra(): MediaPlayer? {
@@ -822,7 +845,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         val mp: MediaPlayer
         if (level <= 4) {
             mp = MediaPlayer.create(activity, R.raw.background_music)
-        } else if (level > 4 && level <= 9){
+        } else if (level in 5..9) {
             mp = MediaPlayer.create(activity, R.raw.background_music_b)
         } else {
             mp = MediaPlayer.create(activity, R.raw.background_music_c)
@@ -857,11 +880,11 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    binding.tvTime.setText(it)
+                    binding.tvTime.text = it
                 },
                 {},
                 {
-                    mediaPlayerTimeOut!!.start()
+                    mediaPlayerTimeOut?.start()
                     CommonApp.checkEnd = true
                     stopAllMp()
                     showDialogSaveScore(false)
@@ -870,7 +893,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun onBackPressForFragment() {
-        inter.onBackPress()
+        inter.onBackPress(false)
         isSelected = true
     }
 
@@ -895,6 +918,8 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         mediaPlayerCallHelp?.setVolume(1f, 1f)
         mediaPlayerPeopleHelp?.setVolume(1f, 1f)
         mediaPlayer5050?.setVolume(1f, 1f)
+        mediaPlayerImportant?.setVolume(1f, 1f)
+        mediaPlayerWinner?.setVolume(1f, 1f)
     }
 
     override fun onStop() {
@@ -918,10 +943,12 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         mediaPlayerCallHelp?.setVolume(0f, 0f)
         mediaPlayerPeopleHelp?.setVolume(0f, 0f)
         mediaPlayer5050?.setVolume(0f, 0f)
+        mediaPlayerImportant?.setVolume(0f, 0f)
+        mediaPlayerWinner?.setVolume(0f, 0f)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         mediaPlayerBG?.release()
         mediaPlayerBG = null
         mediaPlayerTimeOut?.release()
@@ -966,6 +993,10 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         mediaPlayerPeopleHelp = null
         mediaPlayer5050?.release()
         mediaPlayer5050 = null
+        mediaPlayerImportant?.release()
+        mediaPlayerImportant = null
+        mediaPlayerWinner?.release()
+        mediaPlayerWinner = null
     }
 
     private fun stopAllMp() {
@@ -987,5 +1018,7 @@ class InGameFragment : BaseFragment(), View.OnClickListener {
         mediaPlayerCallHelp?.stop()
         mediaPlayerPeopleHelp?.stop()
         mediaPlayer5050?.stop()
+        mediaPlayerImportant?.stop()
+        mediaPlayerWinner?.stop()
     }
 }

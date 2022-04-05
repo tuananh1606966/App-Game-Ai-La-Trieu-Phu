@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_title_over"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thắng Cuộc"
+        android:drawablePadding="12dp"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:textColor="@color/white"
+        android:textSize="26sp"
+        android:drawableLeft="@drawable/save_score"
+        android:background="#2196F3"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/tv_content_over"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bạn sẽ nhận được"
+        android:layout_below="@id/tv_title_over"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="#E91E63"
+        android:textSize="26sp"
+        android:layout_marginTop="12dp"/>
+    <TextView
+        android:id="@+id/tv_money_over"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="150,000,000 VNĐ"
+        android:layout_below="@id/tv_content_over"
+        android:layout_marginTop="12dp"
+        android:textStyle="bold"
+        android:textColor="#E91E63"
+        android:layout_centerHorizontal="true"
+        android:textSize="26sp"
+        android:gravity="center"/>
+    <EditText
+        android:id="@+id/edt_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_money_over"
+        android:hint="Tên người chơi"
+        android:background="@drawable/custom_bg_edt"
+        android:layout_marginTop="18dp"
+        android:textColorHint="@color/black"
+        android:padding="12dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:weightSum="2"
+        android:layout_below="@id/edt_name">
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Lưu điểm"
+            android:textAllCaps="false"
+            android:background="#8BC34A"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btn_huy_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Huỷ"
+            android:textAllCaps="false"
+            android:background="#8BC34A"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</RelativeLayout>

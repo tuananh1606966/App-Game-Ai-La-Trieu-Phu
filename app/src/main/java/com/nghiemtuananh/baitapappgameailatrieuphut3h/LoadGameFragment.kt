@@ -38,8 +38,8 @@ class LoadGameFragment: BaseFragment() {
         mediaPlayer?.setVolume(0f, 0f)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         mediaPlayer?.release()
         mediaPlayer = null
     }

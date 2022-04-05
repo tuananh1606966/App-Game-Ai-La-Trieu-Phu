@@ -112,8 +112,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, IAdapterHighScore {
         mediaPlayerBG?.setVolume(0f, 0f)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         mediaClick?.release()
         mediaClick = null
         mediaPlayerBG?.release()

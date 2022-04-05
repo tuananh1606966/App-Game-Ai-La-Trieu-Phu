@@ -140,7 +140,7 @@ class MainActivity : BaseActivity(), IActivityAndHomeFragment, IActivityAndInGam
         return listHighScore
     }
 
-    override fun onBackPress() {
+    override fun onBackPress(isWinner: Boolean) {
         CommonApp.checkEnd = true
         CommonApp.check5050Help = false
         CommonApp.checkCallHelp = false
@@ -148,7 +148,11 @@ class MainActivity : BaseActivity(), IActivityAndHomeFragment, IActivityAndInGam
         CommonApp.checkPeopleHelp = false
         altpDao = ALTPDao(this)
         listQuestion = altpDao.query15Question()
-        Toast.makeText(this, "Game over!!!", Toast.LENGTH_SHORT).show()
+        if (isWinner) {
+            Toast.makeText(this, "Winner!!!", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Game over!!!", Toast.LENGTH_SHORT).show()
+        }
         fragmentManager.popBackStack("aaa", 0)
     }
 

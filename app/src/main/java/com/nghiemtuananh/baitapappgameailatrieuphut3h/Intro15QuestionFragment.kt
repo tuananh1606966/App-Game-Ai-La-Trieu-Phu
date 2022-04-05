@@ -114,8 +114,8 @@ class Intro15QuestionFragment : BaseFragment() {
         mediaPlayerRule?.setVolume(1f, 1f)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         mediaPlayerRule?.release()
         mediaPlayerRule = null
         mediaPlayerClick?.release()
